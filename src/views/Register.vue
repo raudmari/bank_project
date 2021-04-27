@@ -1,6 +1,8 @@
 <template>
-  <div class="about">
-    <h1>Min</h1>
+  <div class="home">
+    <input v-model="email" placeholder="enter your e-mail"/>
+    <button v-on:click="register()">Register</button>
+
   </div>
 </template>
 
