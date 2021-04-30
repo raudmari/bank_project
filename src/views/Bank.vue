@@ -1,5 +1,7 @@
 <template>
   <div class="home">
+    <button v-on:click="logOut()">LogOut</button>
+    <h2>Banking services</h2>
     <button v-on:click="createAccount()">Create Account</button>
     <br>
     <button v-on:click="deleteAccount()">Delete Account</button>
@@ -14,12 +16,22 @@
     <br>
     <button v-on:click="depositMoney()">Deposit</button>
     <button v-on:click="withdrawMoney()">Withdraw</button>
+    <button v-on:click="transferMoney()">Transfer</button>
     <br>
     <input v-model="ibanTo" placeholder="enter IBAN To number"/>
     <br>
-    <button v-on:click="transferMoney()">Transfer</button>
-    <br>
+
     {{ answerInfo }}
+    <h2>Accounts List</h2>
+    <table align="center">
+      <th>IBAN</th>
+      <th>Balance</th>
+      <tr v-for="account in allAccounts">
+      <td align="left">{{account.iban}}</td>
+      <td align="right">{{account.balance}}</td>
+      </tr>
+    </table>
+
     <table border="0.5">
       <tr v-for="email in emails">
         <td>{{ email }}</td>
@@ -39,12 +51,13 @@ export default {
       'owner': '',
       'iban': '',
       'amount': '',
-      'ibanTo': ''
+      'ibanTo': '',
+      allAccounts: []
     }
   },
   methods: {
     'createAccount': function () {
-      this.$http.post('http://localhost:8080/bankAccount/createAccount/', {
+      this.$http.post('/api/bankAccount/createAccount/', {
         iban: this.iban,
         owner: this.owner,
         balance: 0.0,
@@ -59,7 +72,7 @@ export default {
           })
     },
     'deleteAccount': function () {
-      this.$http.get('http://localhost:8080/bankAccount/deleteAccount/' + this.iban)
+      this.$http.get('/api/bankAccount/deleteAccount/' + this.iban)
           .then(response => {
             console.log(response);
             this.answerInfo = "Account deleted!" + response.data
@@ -69,7 +82,7 @@ export default {
           })
     },
     'getBalance': function () {
-      this.$http.get('http://localhost:8080/bankAccount/getBalance/' + this.iban)
+      this.$http.get('/api/bankAccount/getBalance/' + this.iban)
           .then(response => {
             console.log(response);
             this.answerInfo = "Account balance is EUR " + response.data
@@ -80,7 +93,7 @@ export default {
 
     },
     'depositMoney': function () {
-      this.$http.get('http://localhost:8080/bankAccount/depositMoney/' + this.iban + '/' + this.amount)
+      this.$http.get('/api/bankAccount/depositMoney/' + this.iban + '/' + this.amount)
           .then(response => {
             console.log(response);
             this.answerInfo = "Account balance after deposit is EUR " + response.data
@@ -90,7 +103,7 @@ export default {
           })
     },
     'withdrawMoney': function () {
-      this.$http.get('http://localhost:8080/bankAccount/withdrawMoney/' + this.iban + '/' + this.amount)
+      this.$http.get('/api/bankAccount/withdrawMoney/' + this.iban + '/' + this.amount)
           .then(response => {
             console.log(response);
             this.answerInfo = "Account balance after withdraw is EUR " + response.data
@@ -100,7 +113,7 @@ export default {
           })
     },
     'transferMoney': function () {
-      this.$http.get('http://localhost:8080/bankAccount/transferMoney/' + this.iban + '/' + this.amount + '/' + this.ibanTo)
+      this.$http.get('/api/bankAccount/transferMoney/' + this.iban + '/' + this.amount + '/' + this.ibanTo)
           .then(response => {
             console.log(response);
             this.answerInfo = "Transfer done!" + response.data
@@ -108,7 +121,15 @@ export default {
           .catch(response => {
             this.answerInfo = response.response.data.message
           })
+    },
+    'logOut': function() {
+      this.$http.
     }
+  },
+  mounted() {
+    this.$http.get('/api/bankAccount/getAllAccounts')
+        .then(response => this.allAccounts = response.data);
   }
+
 }
 </script>

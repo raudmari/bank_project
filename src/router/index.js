@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Login from "../views/Login";
 import Register from "../views/Register";
-import Lesson1 from "../views/Lesson1";
 import Bank from "../views/Bank";
+import Lesson1 from "../views/Lesson1";
+
+
 
 Vue.use(VueRouter)
 
@@ -15,7 +18,7 @@ const routes = [
   },
   {
     path: '/register',
-    name: 'Resister',
+    name: 'Register',
     component: Register
   },
   {
@@ -27,7 +30,13 @@ const routes = [
     path: '/Bank',
     name: 'Bank',
     component: Bank
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
   }
+
 ]
 
 const router = new VueRouter({

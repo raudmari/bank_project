@@ -1,8 +1,11 @@
 <template>
   <div class="home">
-    <input v-model="email" placeholder="enter your e-mail"/>
-    <button v-on:click="register()">Register</button>
-    <table border="0.5">
+    <h2>Register e-mail</h2>
+    <input v-model="email" placeholder="enter your email"/>
+    <br>
+    <button v-on:click="register()">Submit</button>
+    <table align="center" border="0.5">
+      <br>
       <tr v-for="email in emails">
         <td>{{email}}</td>
       </tr>
