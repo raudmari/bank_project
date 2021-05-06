@@ -27,8 +27,8 @@
       <th>IBAN</th>
       <th>Balance</th>
       <tr v-for="account in allAccounts">
-      <td align="left">{{account.iban}}</td>
-      <td align="right">{{account.balance}}</td>
+        <td align="left">{{ account.iban }}</td>
+        <td align="right">{{ account.balance }}</td>
       </tr>
     </table>
 
@@ -122,8 +122,10 @@ export default {
             this.answerInfo = response.response.data.message
           })
     },
-    'logOut': function() {
-      this.$http.
+    'logOut': function () {
+      localStorage.removeItem('user-token')
+      location.reload()
+      this.answerInfo = "LogOut success!"
     }
   },
   mounted() {

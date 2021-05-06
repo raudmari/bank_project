@@ -14,27 +14,20 @@
     <br>
     <button v-on:click="login()">Login</button>
     <br>
-    <table align="center" border="0.5">
-      <br>
-      <tr v-for="email in emails">
-        <td>{{ email }}</td>
-      </tr>
-    </table>
+    {{ answerInfo }}
   </div>
 </template>
 
 <script>
 
-
 export default {
   data: function () {
     return {
-      'email': '',
-      'emails': [],
       'username': '',
       'password': '',
       'loginName': '',
-      'loginPassword': ''
+      'loginPassword': '',
+      'answerInfo':''
     }
   },
   methods: {
@@ -44,8 +37,7 @@ export default {
         password: this.password
       })
           .then(response => {
-            console.log(response);
-            this.answerInfo = "New user created!" + response.data
+            this.answerInfo = "New user created!"
           })
           .catch(response => {
             this.answerInfo = response.response.data.message
@@ -58,7 +50,10 @@ export default {
       })
           .then(response => {
             console.log(response);
-            this.answerInfo = "New user created!" + response.data
+            let token = response.data;
+            localStorage.setItem('user-token', token)
+            this.$http.defaults.headers.common['Authorization'] = "Bearer " + token
+            this.answerInfo = "Login success!"
           })
           .catch(response => {
             this.answerInfo = response.response.data.message
